@@ -62,4 +62,6 @@ class Function(Base):
     is_token = Column(Integer, nullable=False)
     # token正则表达式
     token_re = Column(String)
+    # 接口文档
+    api_doc = Column(String)
     group = relationship('Group', back_populates='functions')

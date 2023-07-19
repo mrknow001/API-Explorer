@@ -7,31 +7,67 @@
 @Description ：核心功能
 """
 import json
+import threading
 
+from PyQt5 import QtCore
+
+import DocUI
 from database import SessionLocal
 from models import APP, Group, Function
 import ConfigUI
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
 from ParamsAnalysis import get_api
 
 
 newWindow = None
+docWindow = None
 
+# 打开配置窗口
 def openConfigWindow(ui):
     global newWindow
     newWindow = None
-    # 获取lineEdit，lineEdit_2，lineEdit_3，query_function(ui).id
-    id = ui.lineEdit.text()
-    key = ui.lineEdit_2.text()
-    token = ui.lineEdit_3.text()
-    function_id = query_function(ui).id
-    try:
-        if newWindow is None:
+    if newWindow is None:
+        # 获取lineEdit，lineEdit_2，lineEdit_3，query_function(ui).id
+        id = ui.lineEdit.text()
+        key = ui.lineEdit_2.text()
+        token = ui.lineEdit_3.text()
+        function_id = query_function(ui).id
+        try:
             newWindow = ConfigUI.Ui_Form(id, key, token, function_id)
             newWindow.setupUi(newWindow)
             newWindow.show()
+        except Exception as e:
+            print(e)
+
+# 接口文档处理
+def doc_mofify(doc):
+    return doc
+
+# 获取接口对应说明文档，弹出新窗口显示
+def get_doc(ui):
+    function_id = query_function(ui).id
+    db = SessionLocal()
+    # 根据function_id获取对应的文档api_doc
+    api_doc = db.query(Function).filter(Function.id == function_id).first().api_doc
+    # 文档处理
+    api_doc = doc_mofify(api_doc)
+    # 根据function_id获取对应的文档function
+    api_name = db.query(Function).filter(Function.id == function_id).first().function
+    return api_doc, api_name
+
+# 打开文档窗口
+def open_doc_windows(ui):
+    global docWindow
+    docWindow = None
+    try:
+        if docWindow is None:
+            doc_info = get_doc(ui)
+            docWindow = DocUI.Ui_Form(doc_info[0], doc_info[1])
+            docWindow.setupUi(docWindow)
+            docWindow.show()
     except Exception as e:
         print(e)
+
 
 # 请求api获取信息
 def get_data(ui, get_token=0):
@@ -86,6 +122,9 @@ def key_function(ui):
     # pushButton_4获取comBox对应功能id
     # ui.pushButton_4.clicked.connect(lambda: print(query_function(ui).id))
     ui.pushButton_4.clicked.connect(lambda : openConfigWindow(ui))
+    # pushButton_5获取说明文档
+    ui.pushButton_5.clicked.connect(lambda: open_doc_windows(ui))
+
 
 # 获取lineEdit与lineEdit_2的值，并检查是否为空，同时对输入数据进行检查，删除前后空格以及特殊符号
 def get_token(ui):

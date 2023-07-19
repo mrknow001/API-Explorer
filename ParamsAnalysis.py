@@ -16,13 +16,13 @@ requests.packages.urllib3.disable_warnings()
 # 将参数解析成列表
 def get_list_params(get_params, headers, post_params):
     if get_params != '':
-        get_params_dict = parse_qs(get_params)
+        get_params_dict = parse_qs(get_params, keep_blank_values=True)
         get_result = [["get."+key, value[0]] for key, value in get_params_dict.items()]
     if headers != '':
-        headers_dict = parse_qs(headers)
+        headers_dict = parse_qs(headers, keep_blank_values=True)
         headers_result = [["header."+key, value[0]] for key, value in headers_dict.items()]
     if post_params != '':
-        post_params_dict = parse_qs(post_params)
+        post_params_dict = parse_qs(post_params, keep_blank_values=True)
         post_result = [["post."+key, value[0]] for key, value in post_params_dict.items()]
 
     # 合并列表
@@ -83,6 +83,9 @@ def get_api(params_info, ui_params, get_token=0):
         params = params_info.get_params
         # 使用parse_qs将参数解析，并且替换特殊标识符，{id}替换为ui_params['id']，{key}替换为ui_params['key']，{token}替换为ui_params['token']
         params = parse_qs(params)
+        #
+        # 需要修改bug，如果字段中存在特殊标识符又存在普通字符，现在还没法完美修改
+        #
         for key, value in params.items():
             if value[0] == '{id}':
                 params[key] = ui_params['id']

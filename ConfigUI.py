@@ -39,12 +39,18 @@ class Ui_Form(QtWidgets.QWidget):
     # 参数替换,将特殊标识内容替换
     def params_replace(self, params_list):
         for i in range(len(params_list)):
-            if params_list[i][1] == "{id}":
-                params_list[i][1] = self.id
-            elif params_list[i][1] == "{secert}":
-                params_list[i][1] = self.key
-            elif params_list[i][1] == "{token}":
-                params_list[i][1] = self.token
+            # if params_list[i][1] == "{id}":
+            #     params_list[i][1] = self.id
+            # elif params_list[i][1] == "{secert}":
+            #     params_list[i][1] = self.key
+            # elif params_list[i][1] == "{token}":
+            #     params_list[i][1] = self.token
+            if "{id}" in params_list[i][1]:
+                params_list[i][1] = params_list[i][1].replace("{id}", self.id)
+            elif "{secert}" in params_list[i][1]:
+                params_list[i][1] = params_list[i][1].replace("{secert}", self.key)
+            elif "{token}" in params_list[i][1]:
+                params_list[i][1] = params_list[i][1].replace("{token}", self.token)
         return params_list
 
     # 清空groupBox内所有lineEdit
