@@ -57,7 +57,7 @@ class Function(Base):
     # 参数类型
     content_type = Column(String)
     # post参数
-    post_params = Column(String, nullable=False)
+    post_params = Column(String)
     # 是否为token接口,内容为1或0,不允许为空
     is_token = Column(Integer, nullable=False)
     # token正则表达式
