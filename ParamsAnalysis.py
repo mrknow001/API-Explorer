@@ -72,7 +72,17 @@ def change_params(old_params, new_params):
 
     return get_params, headers, post_params
 
-
+# jssn嵌套字符串格式的json处理
+def parse_json_values(data):
+    for key, value in data.items():
+        if isinstance(value, str):
+            try:
+                data[key] = json.loads(value)
+            except json.JSONDecodeError:
+                pass
+        elif isinstance(value, dict):
+            parse_json_values(value)
+    return data
 
 # 请求API
 def get_api(params_info, ui_params, get_token=0):
@@ -180,7 +190,9 @@ def get_api(params_info, ui_params, get_token=0):
             headers['Accept'] = 'application/json'
             # 发送请求,判断content_type类型，如果是json，使用json参数发送请求，如果是form，使用data参数发送请求
             if content_type == 'application/json':
-                response = requests.post(url, verify=False, headers=headers, json=post_params, timeout=5)
+                # 将所有参数转换为json格式
+                post_params = parse_json_values(post_params)
+                response = requests.post(url, verify=False, headers=headers, json=post_params, timeout=5, proxies=proxies)
             elif content_type == 'application/x-www-form-urlencoded':
                 response = requests.post(url, verify=False, headers=headers, data=post_params, timeout=5)
             else:
