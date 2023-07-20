@@ -11,7 +11,7 @@ import html
 import json
 import threading
 
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 
 import DocUI
 from database import SessionLocal
@@ -21,23 +21,35 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
 from ParamsAnalysis import get_api
 
 
-newWindow = None
+confWindow = None
 docWindow = None
+
 
 # 打开配置窗口
 def openConfigWindow(ui):
-    global newWindow
-    newWindow = None
-    if newWindow is None:
+    global confWindow
+    confWindow = None
+    if confWindow is None:
         # 获取lineEdit，lineEdit_2，lineEdit_3，query_function(ui).id
         id = ui.lineEdit.text()
         key = ui.lineEdit_2.text()
         token = ui.lineEdit_3.text()
         function_id = query_function(ui).id
         try:
-            newWindow = ConfigUI.Ui_Form(id, key, token, function_id)
-            newWindow.setupUi(newWindow)
-            newWindow.show()
+            confWindow = ConfigUI.Ui_Form(id, key, token, function_id)
+            confWindow.setupUi(confWindow)
+            confWindow.show()
+
+            # 在子窗口的 closeEvent 中执行操作
+            def onChildWindowClose(event):
+                # 弹出提示框，提示信息已保存
+                try:
+                    confWindow.close()
+                    QtWidgets.QMessageBox.information(ui.pushButton_4, "提示", "信息已保存")
+                except Exception as e:
+                    print(e)
+
+            confWindow.pushButton_2.clicked.connect(onChildWindowClose)
         except Exception as e:
             print(e)
 
