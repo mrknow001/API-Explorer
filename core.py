@@ -6,6 +6,8 @@
 @IDE ：PyCharm
 @Description ：核心功能
 """
+import codecs
+import html
 import json
 import threading
 
@@ -86,7 +88,7 @@ def get_data(ui, get_token=0):
     ui_params = {"id": id, "key": key, "token": token}
     # 调用get_api函数获取api信息
     result = get_api(params_info, ui_params, get_token)
-    data = json.dumps(result["result"], indent=4).replace('    ', '&nbsp;&nbsp;&nbsp;&nbsp;').replace('\n', '<br/>')
+    data = json.dumps(result["result"], indent=4, ensure_ascii=False).replace('    ', '&nbsp;&nbsp;&nbsp;&nbsp;').replace('\n', '<br/>')
     # 如果是获取token，将token写入lineEdit_3
     try:
         if get_token == 1:

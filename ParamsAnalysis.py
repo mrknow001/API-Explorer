@@ -6,12 +6,17 @@
 @IDE ：PyCharm
 @Description ：参数解析
 """
+import json
+
 import requests
 import re
 from urllib.parse import parse_qs
 
 # 忽略https证书
 requests.packages.urllib3.disable_warnings()
+
+# 代理
+proxies = {"http":"http://127.0.0.1:8080","https":"http://127.0.0.1:8080"}
 
 # 将参数解析成列表
 def get_list_params(get_params, headers, post_params):
@@ -98,13 +103,19 @@ def get_api(params_info, ui_params, get_token=0):
         # 将参数与url拼接成requests可以使用的格式
         url = url + '?' + '&'.join([key + '=' + value for key, value in params.items()])
         try:
+            # 请求时指定Accept为application/json
+            headers_dict['Accept'] = 'application/json'
             # 发送请求
             response = requests.get(url, verify=False, headers=headers_dict, timeout=5)
             # 根据响应判断数据是否为json
             if 'application/json' in response.headers['Content-Type']:
                 r_data = response.json()
             else:
-                r_data = response.text
+                # 尝试将响应转换为json，如果失败则返回text
+                try:
+                    r_data = json.loads(response.content.decode('utf-8'))
+                except:
+                    r_data = response.content.decode('utf-8')
             # 判断是否获取token，如果是则提取token
             if get_token == 1:
                 # 提取token，正则表达式从数据库获取
@@ -165,6 +176,8 @@ def get_api(params_info, ui_params, get_token=0):
         # 将content_type追加到headers中
         headers['Content-Type'] = params_info.content_type
         try:
+            # 请求时指定Accept为application/json
+            headers['Accept'] = 'application/json'
             # 发送请求,判断content_type类型，如果是json，使用json参数发送请求，如果是form，使用data参数发送请求
             if content_type == 'application/json':
                 response = requests.post(url, verify=False, headers=headers, json=post_params, timeout=5)
@@ -176,7 +189,11 @@ def get_api(params_info, ui_params, get_token=0):
             if 'application/json' in response.headers['Content-Type']:
                 r_data = response.json()
             else:
-                r_data = response.text
+                # 尝试将响应转换为json，如果失败则返回text
+                try:
+                    r_data = json.loads(response.content.decode('utf-8'))
+                except:
+                    r_data = response.content.decode('utf-8')
             # 判断是否获取token，如果是则提取token
             if get_token == 1:
                 # 提取token，正则表达式从数据库获取

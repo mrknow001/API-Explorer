@@ -36,7 +36,7 @@ class Ui_Form(QDialog):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "接口文档"))
         self.groupBox.setTitle(_translate("Form", str(self.title)+" 接口文档"))
         # 设置文本
         self.textBrowser.setText(_translate("Form", self.doc))

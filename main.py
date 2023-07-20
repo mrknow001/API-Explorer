@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from UI import Ui_MainWindow
 import sys, os
-# import images
+import images
 import core
 from database import SessionLocal, engine
 from models import APP, Group, Function
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # ui = Ui_MainWindow()
     # ui.setupUi(widget)
     widget.setWindowTitle("API-Explorer v1.0")
-    # widget.setWindowIcon(QtGui.QIcon(":/nsfocus.ico"))
+    widget.setWindowIcon(QtGui.QIcon(":/nsfocus.ico"))
     widget.show()
     core.key_function(ui)
     core.comboBox_function(ui)
