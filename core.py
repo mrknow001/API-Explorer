@@ -84,7 +84,7 @@ def open_doc_windows(ui):
 
 
 # 请求api获取信息
-def get_data(ui, get_token=0):
+def get_data(ui, token_function="", get_token=0):
     # 检查是否输入id，key，token三个参数，id加上key与token二者不能同时为空
     if ui.lineEdit.text() == '' and ui.lineEdit_2.text() == '':
         if ui.lineEdit_3.text() == '':
@@ -96,7 +96,11 @@ def get_data(ui, get_token=0):
     key = ui.lineEdit_2.text()
     token = ui.lineEdit_3.text()
     # 获取api信息
-    params_info = query_function(ui)
+    # 如果是获取token以及token_function不为空
+    if get_token == 1 and token_function is not None:
+        params_info = token_function
+    else:
+        params_info = query_function(ui)
     ui_params = {"id": id, "key": key, "token": token}
     # 调用get_api函数获取api信息
     result = get_api(params_info, ui_params, get_token)
@@ -161,18 +165,18 @@ def get_token(ui):
         for group in groups:
             try:
                 function = db.query(Function).filter(Function.group_id == group.id).filter(Function.is_token == 1).first()
-                token_api = function.url
+                if function is not None:
+                    token_api = function
+                    break
             except Exception as e:
-                # print(e)
-                pass
+                print(e)
     except Exception as e:
-        # print(e)
-        pass
+        print(e)
     if token_api == '':
         ui.textBrowser.append('未找到token接口')
         return
     # 请求api接口获取token
-    get_data(ui,get_token=1)
+    get_data(ui, token_api,get_token=1)
 
 
 

@@ -192,7 +192,7 @@ def get_api(params_info, ui_params, get_token=0):
             if content_type == 'application/json':
                 # 将所有参数转换为json格式
                 post_params = parse_json_values(post_params)
-                response = requests.post(url, verify=False, headers=headers, json=post_params, timeout=5, proxies=proxies)
+                response = requests.post(url, verify=False, headers=headers, json=post_params, timeout=5)
             elif content_type == 'application/x-www-form-urlencoded':
                 response = requests.post(url, verify=False, headers=headers, data=post_params, timeout=5)
             else:
