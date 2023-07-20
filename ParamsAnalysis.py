@@ -102,12 +102,18 @@ def get_api(params_info, ui_params, get_token=0):
         # 需要修改bug，如果字段中存在特殊标识符又存在普通字符，现在还没法完美修改
         #
         for key, value in params.items():
-            if value[0] == '{id}':
-                params[key] = ui_params['id']
-            elif value[0] == '{secert}':
-                params[key] = ui_params['key']
-            elif value[0] == '{token}':
-                params[key] = ui_params['token']
+            # if value[0] == '{id}':
+            #     params[key] = ui_params['id']
+            # elif value[0] == '{secert}':
+            #     params[key] = ui_params['key']
+            # elif value[0] == '{token}':
+            #     params[key] = ui_params['token']
+            if '{id}' in value[0]:
+                params[key] = value[0].replace('{id}', ui_params['id'])
+            elif '{secert}' in value[0]:
+                params[key] = value[0].replace('{secert}', ui_params['key'])
+            elif '{token}' in value[0]:
+                params[key] = value[0].replace('{token}', ui_params['token'])
             else:
                 params[key] = value[0]
         # 将参数与url拼接成requests可以使用的格式
