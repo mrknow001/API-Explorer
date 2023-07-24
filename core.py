@@ -104,6 +104,14 @@ def get_data(ui, token_function="", get_token=0):
     ui_params = {"id": id, "key": key, "token": token}
     # 调用get_api函数获取api信息
     result = get_api(params_info, ui_params, get_token)
+    # 如果超时，直接弹窗
+    if result["result"] == "请求超时":
+        QtWidgets.QMessageBox.information(ui.pushButton_4, "提示", "请求超时,请检查网络并重试")
+        return
+    # 如果连接失败，直接弹窗
+    elif result["result"] == "连接失败":
+        QtWidgets.QMessageBox.information(ui.pushButton_4, "提示", "连接失败，无法建立连接，请检查接口")
+        return
     data = json.dumps(result["result"], indent=4, ensure_ascii=False).replace('    ', '&nbsp;&nbsp;&nbsp;&nbsp;').replace('\n', '<br/>')
     # 如果是获取token，将token写入lineEdit_3
     try:

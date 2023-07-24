@@ -72,7 +72,7 @@ def change_params(old_params, new_params):
 
     return get_params, headers, post_params
 
-# jssn嵌套字符串格式的json处理
+# jssn嵌套字符串格式的json处理,以及list处理
 def parse_json_values(data):
     for key, value in data.items():
         if isinstance(value, str):
@@ -144,6 +144,11 @@ def get_api(params_info, ui_params, get_token=0):
             # 如果不是获取token，返回{"result":response.text, "token":null}
             else:
                 return {"result":r_data, "token":None}
+        # 如果超时，弹窗提示
+        except requests.exceptions.Timeout:
+            return {"result":"请求超时", "token":None}
+        except requests.exceptions.ConnectionError:
+            return {"result": "连接失败，无法建立连接", "token": None}
         except Exception as e:
             return {"result":"获取失败，错误信息如下：\n"+str(e), "token":None}
 
@@ -224,6 +229,11 @@ def get_api(params_info, ui_params, get_token=0):
             # 如果不是获取token，返回{"result":response.text, "token":null}
             else:
                 return {"result":r_data, "token":None}
+        # 如果超时，弹窗提示
+        except requests.exceptions.Timeout:
+            return {"result": "请求超时", "token": None}
+        except requests.exceptions.ConnectionError:
+            return {"result": "连接失败", "token": None}
         except Exception as e:
             return {"result":"获取失败，错误信息如下：\n"+str(e), "token":None}
     else:
