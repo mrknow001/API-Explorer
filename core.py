@@ -102,8 +102,13 @@ def get_data(ui, token_function="", get_token=0):
     else:
         params_info = query_function(ui)
     ui_params = {"id": id, "key": key, "token": token}
-    # 调用get_api函数获取api信息
-    result = get_api(params_info, ui_params, get_token)
+    try:
+        # 调用get_api函数获取api信息
+        result = get_api(params_info, ui_params, get_token)
+    except Exception as e:
+        ui.textBrowser.append(str(e))
+        QtWidgets.QMessageBox.information(ui.pushButton_4, "提示", "接口调用错误，请检查接口信息")
+        return
     # 如果超时，直接弹窗
     if result["result"] == "请求超时":
         QtWidgets.QMessageBox.information(ui.pushButton_4, "提示", "请求超时,请检查网络并重试")
