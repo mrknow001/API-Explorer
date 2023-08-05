@@ -118,6 +118,24 @@ def get_api(params_info, ui_params, get_token=0):
                 params[key] = value[0]
         # 将参数与url拼接成requests可以使用的格式
         url = url + '?' + '&'.join([key + '=' + value for key, value in params.items()])
+        # 处理headers
+        for key, value in headers_dict.items():
+            # if value[0] == '{id}':
+            #     headers[key] = ui_params['id']
+            # elif value[0] == '{secert}':
+            #     headers[key] = ui_params['key']
+            # elif value[0] == '{token}':
+            #     headers[key] = ui_params['token']
+            # else:
+            #     headers[key] = value[0]
+            if '{id}' in value:
+                headers_dict[key] = value.replace('{id}', ui_params['id'])
+            elif '{secert}' in value:
+                headers_dict[key] = value.replace('{secert}', ui_params['key'])
+            elif '{token}' in value:
+                headers_dict[key] = value.replace('{token}', ui_params['token'])
+            else:
+                headers_dict[key] = value
         try:
             # 请求时指定Accept为application/json
             headers_dict['Accept'] = 'application/json'
@@ -162,12 +180,20 @@ def get_api(params_info, ui_params, get_token=0):
         # 处理get_params
         get_params = parse_qs(get_params)
         for key, value in get_params.items():
-            if value[0] == '{id}':
-                get_params[key] = ui_params['id']
-            elif value[0] == '{secert}':
-                get_params[key] = ui_params['key']
-            elif value[0] == '{token}':
-                get_params[key] = ui_params['token']
+            # if value[0] == '{id}':
+            #     get_params[key] = ui_params['id']
+            # elif value[0] == '{secert}':
+            #     get_params[key] = ui_params['key']
+            # elif value[0] == '{token}':
+            #     get_params[key] = ui_params['token']
+            # else:
+            #     get_params[key] = value[0]
+            if '{id}' in value[0]:
+                get_params[key] = value[0].replace('{id}', ui_params['id'])
+            elif '{secert}' in value[0]:
+                get_params[key] = value[0].replace('{secert}', ui_params['key'])
+            elif '{token}' in value[0]:
+                get_params[key] = value[0].replace('{token}', ui_params['token'])
             else:
                 get_params[key] = value[0]
         # get参数拼接url
@@ -175,23 +201,39 @@ def get_api(params_info, ui_params, get_token=0):
         # 处理headers
         headers = parse_qs(headers)
         for key, value in headers.items():
-            if value[0] == '{id}':
-                headers[key] = ui_params['id']
-            elif value[0] == '{secert}':
-                headers[key] = ui_params['key']
-            elif value[0] == '{token}':
-                headers[key] = ui_params['token']
+            # if value[0] == '{id}':
+            #     headers[key] = ui_params['id']
+            # elif value[0] == '{secert}':
+            #     headers[key] = ui_params['key']
+            # elif value[0] == '{token}':
+            #     headers[key] = ui_params['token']
+            # else:
+            #     headers[key] = value[0]
+            if '{id}' in value[0]:
+                headers[key] = value[0].replace('{id}', ui_params['id'])
+            elif '{secert}' in value[0]:
+                headers[key] = value[0].replace('{secert}', ui_params['key'])
+            elif '{token}' in value[0]:
+                headers[key] = value[0].replace('{token}', ui_params['token'])
             else:
                 headers[key] = value[0]
         # 处理post_params
         post_params = parse_qs(post_params)
         for key, value in post_params.items():
-            if value[0] == '{id}':
-                post_params[key] = ui_params['id']
-            elif value[0] == '{secert}':
-                post_params[key] = ui_params['key']
-            elif value[0] == '{token}':
-                post_params[key] = ui_params['token']
+            # if value[0] == '{id}':
+            #     post_params[key] = ui_params['id']
+            # elif value[0] == '{secert}':
+            #     post_params[key] = ui_params['key']
+            # elif value[0] == '{token}':
+            #     post_params[key] = ui_params['token']
+            # else:
+            #     post_params[key] = value[0]
+            if '{id}' in value[0]:
+                post_params[key] = value[0].replace('{id}', ui_params['id'])
+            elif '{secert}' in value[0]:
+                post_params[key] = value[0].replace('{secert}', ui_params['key'])
+            elif '{token}' in value[0]:
+                post_params[key] = value[0].replace('{token}', ui_params['token'])
             else:
                 post_params[key] = value[0]
         # 将content_type追加到headers中
