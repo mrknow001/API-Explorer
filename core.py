@@ -155,6 +155,8 @@ def key_function(ui):
     ui.pushButton_4.clicked.connect(lambda : openConfigWindow(ui))
     # pushButton_5获取说明文档
     ui.pushButton_5.clicked.connect(lambda: open_doc_windows(ui))
+    # pushButton_6对lineEdit_3内容进行base64编码
+    ui.pushButton_6.clicked.connect(lambda: ui.lineEdit_3.setText(codecs.encode(ui.lineEdit_3.text().encode(), 'base64').decode().rstrip()))
 
 
 # 获取lineEdit与lineEdit_2的值，并检查是否为空，同时对输入数据进行检查，删除前后空格以及特殊符号
@@ -245,9 +247,10 @@ def query_function(ui):
     db = SessionLocal()
     # 查询comboBox_2中的应用名称对应的分组id,并赋值给group_id
     group_id = db.query(Group.id).filter(Group.group == ui.comboBox_2.currentText()).first()
-    # 查询comboBox_3中的应用名称对应的功能id,并赋值给function_id
-    function_id = db.query(Function.id).filter(Function.function == ui.comboBox_3.currentText()).first()
-    # 查询功能表中的功能信息,并赋值给function
-    function = db.query(Function).filter(Function.group_id == group_id[0], Function.id == function_id[0]).first()
-    # 将function中的数据显示到textBrowser中
+    # # 查询comboBox_3中的应用名称对应的功能id,并赋值给function_id
+    # function_id = db.query(Function.id).filter(Function.function == ui.comboBox_3.currentText()).first()
+    # # 查询功能表中的功能信息,并赋值给function
+    # function = db.query(Function).filter(Function.group_id == group_id[0], Function.id == function_id[0]).first()
+    # # 将function中的数据显示到textBrowser中
+    function = db.query(Function).filter(Function.group_id == group_id[0], Function.function == ui.comboBox_3.currentText()).first()
     return function
