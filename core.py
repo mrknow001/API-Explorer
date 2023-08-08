@@ -169,25 +169,29 @@ def get_token(ui):
     # 根据comBox获取应用名称，在其所有分组中查找is_token为1的数据
     db = SessionLocal()
     app_id = db.query(APP.id).filter(APP.application == ui.comboBox.currentText()).first()
-    token_api = ''
+    token_api = []
     try:
         groups = db.query(Group).filter(Group.app_id == app_id[0]).all()
         for group in groups:
             try:
                 function = db.query(Function).filter(Function.group_id == group.id).filter(Function.is_token == 1).first()
                 if function is not None:
-                    token_api = function
-                    break
+                    token_api.append(function)
             except Exception as e:
                 print(e)
     except Exception as e:
         print(e)
-    if token_api == '':
+    if len(token_api) == 0:
         ui.textBrowser.append('未找到token接口')
         return
-    # 请求api接口获取token
-    get_data(ui, token_api,get_token=1)
-
+    elif len(token_api) == 1:
+        # 请求api接口获取token
+        get_data(ui, token_api[0],get_token=1)
+    # 如果获取到多个token接口，根据comboBox_2获取分组名称，根据comboBox_3获取功能名称
+    else:
+        group_id = db.query(Group.id).filter(Group.group == ui.comboBox_2.currentText()).first()
+        function = db.query(Function).filter(Function.group_id == group_id[0]).filter(Function.is_token == 1).first()
+        get_data(ui, function, get_token=1)
 
 
 # comboBox选择功能，数据从数据库中application表读取
