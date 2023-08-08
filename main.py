@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from UI import Ui_MainWindow
-import sys, os
+import sys
 import images
 import core
 from database import SessionLocal, engine

@@ -152,8 +152,14 @@ def get_api(params_info, ui_params, get_token=0):
                     r_data = response.content.decode('utf-8')
             # 判断是否获取token，如果是则提取token
             if get_token == 1:
-                # 提取token，正则表达式从数据库获取
-                token = re.findall(params_info.token_re, response.text)
+                if params_info.token_re == "":
+                    return {"result":r_data, "token":"未获取到token"}
+                elif params_info.token_re == "{cookie}":
+                    # 提取cookie
+                    return {"result":r_data, "token":response.cookies}
+                else:
+                    # 提取token，正则表达式从数据库获取
+                    token = re.findall(params_info.token_re, response.text)
                 # 根据token长度判断是否获取到token
                 if len(token) == 0:
                     return {"result":r_data, "token":"未获取到token"}
