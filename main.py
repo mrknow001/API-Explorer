@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # ui = Ui_MainWindow()
     # ui.setupUi(widget)
     widget.setWindowTitle("API-Explorer v1.0")
-    widget.setWindowIcon(QtGui.QIcon(":/nsfocus.ico"))
+    widget.setWindowIcon(QtGui.QIcon(":/icon.ico"))
     widget.show()
     core.key_function(ui)
     core.comboBox_function(ui)

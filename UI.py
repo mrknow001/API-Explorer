@@ -112,7 +112,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "AccessToken"))
         self.pushButton_6.setText(_translate("MainWindow", "Base64编码"))
         self.groupBox.setTitle(_translate("MainWindow", "执行日志"))
-        self.label_3.setText(_translate("MainWindow", "更多精彩资源请关注公众号：<a>刨洞安全团队</a>"))
+        self.label_3.setText(_translate("MainWindow", "公众号：刨洞安全团队"))
         self.groupBox_2.setTitle(_translate("MainWindow", "功能"))
         self.pushButton_5.setText(_translate("MainWindow", "接口说明"))
         self.pushButton_4.setText(_translate("MainWindow", "接口配置"))

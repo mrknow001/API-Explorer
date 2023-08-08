@@ -12,7 +12,7 @@ from cx_Freeze import setup, Executable
 # 设置脚本的名称和版本号
 script_name = "main.py"
 script_version = "1.0.0"
-icon = "nsfocus.ico"
+icon = "icon.ico"
 
 # 创建可执行文件的配置
 executables = [Executable(script_name, icon=icon, base="Win32GUI")]
