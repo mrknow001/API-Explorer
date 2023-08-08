@@ -13,23 +13,23 @@
 
 1、获取accesstoken
 
-​	![image-20230808164018645](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808164018645.png)
+​	![image-20230808164018645](./img/image-20230808164018645.png)
 
 2、使用此token访问其他接口
 
-![image-20230808164144274](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808164144274.png)
+![image-20230808164144274](./img/image-20230808164144274.png)
 
-![image-20230808164421025](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808164421025.png)
+![image-20230808164421025](./img/image-20230808164421025.png)
 
 有些时候拿到的appid跟secert公众号用不了，其实是它没有公众号，只有小程序，可以先用公众号接口获取token然后使用小程序接口获取其对应信息。
 
-![image-20230808164729537](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808164729537.png)
+![image-20230808164729537](./img/image-20230808164729537.png)
 
 场景2-(设备巡检)：
 
 绿盟扫描器
 
-![image-20230808165609236](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808165609236.png)
+![image-20230808165609236](./img/image-20230808165609236.png)
 
 绿盟UTS
 
@@ -37,15 +37,15 @@
 
 f12后登录页面输入账号密码，找到authen_user接口，获取password内容即可。这个密码可复用，只要不改密码就可以一直用。
 
-![image-20230808170914634](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808170914634.png)
+![image-20230808170914634](./img/image-20230808170914634.png)
 
-![image-20230808170528108](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808170528108.png)
+![image-20230808170528108](./img/image-20230808170528108.png)
 
 使用token获取设备信息
 
-![image-20230808170625614](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808170625614.png)
+![image-20230808170625614](./img/image-20230808170625614.png)
 
-![image-20230808170726084](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808170726084.png)
+![image-20230808170726084](./img/image-20230808170726084.png)
 
 场景3-(签到类)：
 
@@ -55,7 +55,7 @@ f12后登录页面输入账号密码，找到authen_user接口，获取password�
 
 ### **认证区域**
 
-![image-20230808190520469](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808190520469.png)
+![image-20230808190520469](./img/image-20230808190520469.png)
 
 - 由于标签可能不一样，第一行第一个就以id标识，第二个以key表示，第二行以token表示
 
@@ -75,7 +75,7 @@ f12后登录页面输入账号密码，找到authen_user接口，获取password�
 
 ### **功能区域**
 
-![image-20230808191938790](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808191938790.png)
+![image-20230808191938790](./img/image-20230808191938790.png)
 
 两个下拉框第一个是分组，第二个是接口。为了防止接口数量太多使用起来不便，所以尽量对接口分组。
 
@@ -91,19 +91,19 @@ f12后登录页面输入账号密码，找到authen_user接口，获取password�
 
 为了展示所有内容，不好以可视化或者其他方式展示，直接将响应body原样输出了。(暂时没想到，如果有方案可以指导下)
 
-![image-20230808193301391](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808193301391.png)
+![image-20230808193301391](./img/image-20230808193301391.png)
 
 ## 接口编写
 
 ### 数据库关系结构图
 
-<img src="C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808172931003.png" alt="image-20230808172931003" style="zoom:50%;" />
+<img src="./img/image-20230808172931003.png" alt="image-20230808172931003" style="zoom:50%;" />
 
-![image-20230808173749367](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808173749367.png)
+![image-20230808173749367](./img/image-20230808173749367.png)
 
-![image-20230808173758764](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808173758764.png)
+![image-20230808173758764](./img/image-20230808173758764.png)
 
-![image-20230808173814415](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808173814415.png)
+![image-20230808173814415](./img/image-20230808173814415.png)
 
 ### 流程
 
@@ -134,7 +134,7 @@ f12后登录页面输入账号密码，找到authen_user接口，获取password�
 
 - 目前接口配置中内置三个特殊标识，{id},{secert},{token}，分别对应第一排两个输入框与第二排一个输入框。表示从输入框获取值。
 
-  ![image-20230808185746865](C:\Users\YD\AppData\Roaming\Typora\typora-user-images\image-20230808185746865.png)
+  ![image-20230808185746865](./img/image-20230808185746865.png)
 
   注：特殊标识可使用在headers、get_params、post_params
 
