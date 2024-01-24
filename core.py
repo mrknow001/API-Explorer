@@ -163,9 +163,9 @@ def get_token(ui):
     if id == '' or key == '':
         ui.textBrowser.append('id或key不能为空')
         return
-    if id.isalnum() == False or key.isalnum() == False:
-        ui.textBrowser.append('id或key不能包含特殊字符')
-        return
+    # if id.isalnum() == False or key.isalnum() == False:
+    #     ui.textBrowser.append('id或key不能包含特殊字符')
+    #     return
     # 根据comBox获取应用名称，在其所有分组中查找is_token为1的数据
     db = SessionLocal()
     app_id = db.query(APP.id).filter(APP.application == ui.comboBox.currentText()).first()
