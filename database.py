@@ -6,13 +6,16 @@
 @IDE ：PyCharm
 @Description ：数据库连接
 """
-
-
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./ApiInfo2.0.db"
+# 检查ApiInfo2.0.db是否存在
+if os.path.exists("./ApiInfo2.0.db"):
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./ApiInfo2.0.db"
+else:
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./ApiInfo.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
