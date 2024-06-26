@@ -26,6 +26,8 @@ class APP(Base):
     id_tab = Column(String, nullable=False)
     # 应用key标签，不允许为空
     key_tab = Column(String, nullable=False)
+    # 基础路径
+    baseurl = Column(String, nullable=False)
 
 
 # 定义功能分组模型类

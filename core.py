@@ -90,6 +90,7 @@ def get_data(ui, token_function="", get_token=0):
     id = ui.lineEdit.text()
     key = ui.lineEdit_2.text()
     token = ui.lineEdit_3.text()
+    baseurl = ui.lineEdit_4.text()
     # 获取api信息
     # 如果是获取token以及token_function不为空
     if get_token == 1 and token_function is not None:
@@ -99,7 +100,7 @@ def get_data(ui, token_function="", get_token=0):
     ui_params = {"id": id, "key": key, "token": token}
     try:
         # 调用get_api函数获取api信息
-        result = get_api(params_info, ui_params, get_token)
+        result = get_api(baseurl, params_info, ui_params, get_token)
     except Exception as e:
         ui.textBrowser.append(str(e))
         QtWidgets.QMessageBox.information(ui.pushButton_4, "提示", "接口调用错误，请检查接口信息")
@@ -209,16 +210,25 @@ def comboBox_2_function(ui):
         return
     db = SessionLocal()
     # 查询comboBox中的应用名称对应的id,并赋值给app_id
-    app_id = db.query(APP.id).filter(APP.application == ui.comboBox.currentText()).first()
+    app = db.query(APP).filter(APP.application == ui.comboBox.currentText()).first()
+    # 检查group是否有'baseurl'属性
+    if hasattr(app, 'baseurl'):
+        # 检查'baseurl'是否不为空
+        if app.baseurl:
+            ui.lineEdit_4.setText(app.baseurl)
+        else:
+            ui.lineEdit_4.clear()
+    else:
+        ui.lineEdit_4.clear()
     # 查询分组表中的分组名称,并赋值给groups
-    groups = db.query(Group.group).filter(Group.app_id == app_id[0]).all()
+    groups = db.query(Group.group).filter(Group.app_id == app.id).all()
     # 清空comboBox_2中的数据
     ui.comboBox_2.clear()
     # 将groups中的数据添加到comboBox_2中
     for group in groups:
         ui.comboBox_2.addItem(group.group)
     # 根据应用id查询应用id标签,并设置label跟label_2的值
-    id_tab = db.query(APP).filter(APP.id == app_id[0]).first()
+    id_tab = db.query(APP).filter(APP.id == app.id).first()
     ui.label.setText(id_tab.id_tab)
     ui.label_2.setText(id_tab.key_tab)
 

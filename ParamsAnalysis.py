@@ -85,7 +85,7 @@ def parse_json_values(data):
     return data
 
 # 请求API
-def get_api(params_info, ui_params, get_token=0):
+def get_api(baseurl, params_info, ui_params, get_token=0):
     try:
         # 读取数据库中headers,并转换为字典
         headers = params_info.headers
@@ -97,7 +97,12 @@ def get_api(params_info, ui_params, get_token=0):
     # 判断请求方法为get还是post,不区分大小写
     if params_info.type.upper() == 'GET':
         # 从数据库获取请求参数以及url后拼接，使用requests发送请求
-        url = params_info.url
+        if baseurl:
+            url = baseurl + re.sub(r'http[s]?://[^/]+', '', params_info.url)
+        else:
+            url = params_info.url
+        if not re.findall("http[s]://[^\s]+",url):
+            return {"result": "baseurl为空，请检查输入baseurl或数据库接口", "token": None}
         params = params_info.get_params
         # 使用parse_qs将参数解析，并且替换特殊标识符，{id}替换为ui_params['id']，{key}替换为ui_params['key']，{token}替换为ui_params['token']
         params = parse_qs(params)
@@ -156,7 +161,7 @@ def get_api(params_info, ui_params, get_token=0):
             # 判断是否获取token，如果是则提取token
             if get_token == 1:
                 if params_info.token_re == "":
-                    return {"result":r_data, "token":"未获取到token"}
+                    return {"result":r_data, "token":"未获取到token2"}
                 elif params_info.token_re == "{cookie}":
                     # 提取cookie
                     return {"result":r_data, "token":response.cookies}
@@ -165,7 +170,7 @@ def get_api(params_info, ui_params, get_token=0):
                     token = re.findall(params_info.token_re, response.text)
                 # 根据token长度判断是否获取到token
                 if len(token) == 0:
-                    return {"result":r_data, "token":"未获取到token"}
+                    return {"result":r_data, "token":"未获取到token3"}
                 else:
                     return {"result":r_data, "token":token[0]}
             # 如果不是获取token，返回{"result":response.text, "token":null}
@@ -180,7 +185,12 @@ def get_api(params_info, ui_params, get_token=0):
             return {"result":"获取失败，错误信息如下：\n"+str(e), "token":None}
 
     elif params_info.type.upper() == 'POST':
-        url = params_info.url
+        if baseurl:
+            url = baseurl + re.sub(r'http[s]?://[^/]+', '', params_info.url)
+        else:
+            url = params_info.url
+        if not re.findall("http[s]://[^\s]+", url):
+            return {"result": "baseurl为空，请检查输入baseurl或数据库接口", "token": None}
         get_params = params_info.get_params
         headers = params_info.headers
         content_type = params_info.content_type
@@ -271,16 +281,16 @@ def get_api(params_info, ui_params, get_token=0):
             # 判断是否获取token，如果是则提取token
             if get_token == 1:
                 if params_info.token_re == "":
-                    return {"result":r_data, "token":"未获取到token"}
+                    return {"result":r_data, "token":"未获取到token1"}
                 elif params_info.token_re == "{cookie}":
                     # 提取cookie
                     return {"result":r_data, "token":response.cookies}
                 else:
                     # 提取token，正则表达式从数据库获取
-                    token = re.findall(params_info.token_re, str(r_data))
+                    token = re.findall(params_info.token_re, response.text)
                 # 根据token长度判断是否获取到token
                 if len(token) == 0:
-                    return {"result":r_data, "token":"未获取到token"}
+                    return {"result":r_data, "token":"未获取到token2"}
                 else:
                     return {"result":r_data, "token":token[0]}
             # 如果不是获取token，返回{"result":response.text, "token":null}
