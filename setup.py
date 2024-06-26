@@ -21,7 +21,7 @@ executables = [Executable(script_name, icon=icon, base="Win32GUI")]
 build_options = {
     "packages": ["PyQt5", "urllib.parse", "re", "requests", "sqlalchemy"],  # 需要包含的额外模块
     # "excludes": ["tkinter"],  # 需要排除的模块
-    "include_files": ["ApiInfo.db"],  # 需要包含的其他文件
+    "include_files": ["ApiInfo2.0.db"],  # 需要包含的其他文件
     "optimize": 2,  # 优化级别，0为不优化，2为最高优化
     "include_msvcr": True,  # 是否包含MSVC运行时库
     "silent": True,  # 构建过程中是否输出信息
