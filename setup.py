@@ -11,7 +11,7 @@ from cx_Freeze import setup, Executable
 
 # 设置脚本的名称和版本号
 script_name = "main.py"
-script_version = "2.0.1"
+script_version = "2.0.0"
 icon = "icon.ico"
 
 # 创建可执行文件的配置
