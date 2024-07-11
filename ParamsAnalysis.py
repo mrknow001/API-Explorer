@@ -15,9 +15,6 @@ from urllib.parse import parse_qs
 # 忽略https证书
 requests.packages.urllib3.disable_warnings()
 
-# 代理
-proxies = {"http":"http://127.0.0.1:8080","https":"http://127.0.0.1:8080"}
-
 # 将参数解析成列表
 def get_list_params(get_params, headers, post_params):
     if get_params != '':
@@ -85,7 +82,7 @@ def parse_json_values(data):
     return data
 
 # 请求API
-def get_api(baseurl, params_info, ui_params, get_token=0):
+def get_api(baseurl, params_info, ui_params, get_token=0, proxies=None):
     try:
         # 读取数据库中headers,并转换为字典
         headers = params_info.headers
@@ -101,7 +98,7 @@ def get_api(baseurl, params_info, ui_params, get_token=0):
             url = baseurl + re.sub(r'http[s]?://[^/]+', '', params_info.url)
         else:
             url = params_info.url
-        if not re.findall("http[s]://[^\s]+",url):
+        if not re.findall("http[s]?://[^\s]+",url):
             return {"result": "baseurl为空，请检查输入baseurl或数据库接口", "token": None}
         params = params_info.get_params
         # 使用parse_qs将参数解析，并且替换特殊标识符，{id}替换为ui_params['id']，{key}替换为ui_params['key']，{token}替换为ui_params['token']
@@ -148,7 +145,7 @@ def get_api(baseurl, params_info, ui_params, get_token=0):
             # 请求时指定Accept为application/json
             headers_dict['Accept'] = 'application/json'
             # 发送请求
-            response = requests.get(url, verify=False, headers=headers_dict, timeout=5)
+            response = requests.get(url, verify=False, headers=headers_dict, timeout=5, proxies=proxies)
             # 根据响应判断数据是否为json
             if 'application/json' in response.headers['Content-Type']:
                 r_data = response.json()
@@ -182,7 +179,7 @@ def get_api(baseurl, params_info, ui_params, get_token=0):
         except requests.exceptions.ConnectionError:
             return {"result": "连接失败，无法建立连接", "token": None}
         except Exception as e:
-            return {"result":"获取失败，错误信息如下：\n"+str(e), "token":None}
+            return {"result":"获取失败1，错误信息如下：\n"+str(e), "token":None}
 
     elif params_info.type.upper() == 'POST':
         if baseurl:
@@ -264,9 +261,9 @@ def get_api(baseurl, params_info, ui_params, get_token=0):
             if content_type == 'application/json':
                 # 将所有参数转换为json格式
                 post_params = parse_json_values(post_params)
-                response = requests.post(url, verify=False, headers=headers, json=post_params, timeout=5)
+                response = requests.post(url, verify=False, headers=headers, json=post_params, timeout=5, proxies=proxies)
             elif content_type == 'application/x-www-form-urlencoded':
-                response = requests.post(url, verify=False, headers=headers, data=post_params, timeout=5)
+                response = requests.post(url, verify=False, headers=headers, data=post_params, timeout=5, proxies=proxies)
             else:
                 return {"result": "暂不支持from、json以外参数类型", "token": None}
             # 根据响应判断数据是否为json
@@ -302,6 +299,6 @@ def get_api(baseurl, params_info, ui_params, get_token=0):
         except requests.exceptions.ConnectionError:
             return {"result": "连接失败", "token": None}
         except Exception as e:
-            return {"result":"获取失败，错误信息如下：\n"+str(e), "token":None}
+            return {"result":"获取失败2，错误信息如下：\n"+str(e), "token":None}
     else:
         return {"result":"暂不支持GET、POST以外方法", "token":None}

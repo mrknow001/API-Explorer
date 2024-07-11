@@ -91,6 +91,11 @@ def get_data(ui, token_function="", get_token=0):
     key = ui.lineEdit_2.text()
     token = ui.lineEdit_3.text()
     baseurl = ui.lineEdit_4.text()
+    # 检查checkBox是否选中，选中则获取lineEdit_5的值，并作为代理
+    if ui.checkBox.isChecked():
+        proxies = {"http": ui.lineEdit_5.text(), "https": ui.lineEdit_5.text()}
+    else:
+        proxies = None
     # 获取api信息
     # 如果是获取token以及token_function不为空
     if get_token == 1 and token_function is not None:
@@ -100,7 +105,7 @@ def get_data(ui, token_function="", get_token=0):
     ui_params = {"id": id, "key": key, "token": token}
     try:
         # 调用get_api函数获取api信息
-        result = get_api(baseurl, params_info, ui_params, get_token)
+        result = get_api(baseurl, params_info, ui_params, get_token, proxies)
     except Exception as e:
         ui.textBrowser.append(str(e))
         QtWidgets.QMessageBox.information(ui.pushButton_4, "提示", "接口调用错误，请检查接口信息")

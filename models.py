@@ -35,8 +35,8 @@ class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
     app_id = Column(Integer, ForeignKey('application.id'))
-    # 分组名称,不允许为空
-    group = Column(String, nullable=False)
+    # 分组名称,不允许为空，不允许重复
+    group = Column(String, nullable=False, unique=True)
     functions = relationship('Function', back_populates='group')
     app = relationship('APP', back_populates='groups')
 
