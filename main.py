@@ -6,7 +6,6 @@ import core
 from database import SessionLocal, engine
 from models import APP, Group, Function
 
-
 # 创建数据库表
 APP.metadata.create_all(bind=engine)
 Group.metadata.create_all(bind=engine)
@@ -35,7 +34,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.comboBox_3.clear()
         core.comboBox_3_function(self.ui)
 
-
     def closeEvent(self, event):
         try:
             reply = QtWidgets.QMessageBox.question(self, '提醒', "是否要退出程序？",
@@ -55,8 +53,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     widget = MainWindow()
     ui = widget.ui
-    # ui = Ui_MainWindow()
-    # ui.setupUi(widget)
     widget.setWindowTitle("API-Explorer v2.1.0")
     widget.setWindowIcon(QtGui.QIcon(":/icon.ico"))
     widget.show()
