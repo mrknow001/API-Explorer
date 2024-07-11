@@ -89,8 +89,12 @@ def get_api(baseurl, params_info, ui_params, get_token=0, proxies=None):
     except:
         headers = ''
     headers_dict = parse_qs(headers)
-    # 值等于值的第0位
-    headers_dict = {key:value[0] for key, value in headers_dict.items()}
+    # 循环检查headers_dict中的值，如果是列表，则将他循环取出并以分号连接
+    for key, value in headers_dict.items():
+        if isinstance(value, list):
+            headers_dict[key] = ';'.join(value)
+    # # 值等于值的第0位         //弃用，多个值取值不全
+    # headers_dict = {key:value[0] for key, value in headers_dict.items()}
     # 判断请求方法为get还是post,不区分大小写
     if params_info.type.upper() == 'GET':
         # 从数据库获取请求参数以及url后拼接，使用requests发送请求
@@ -216,6 +220,10 @@ def get_api(baseurl, params_info, ui_params, get_token=0, proxies=None):
         url = url + '?' + '&'.join([key + '=' + value for key, value in get_params.items()])
         # 处理headers
         headers = parse_qs(headers)
+        # 循环检查headers_dict中的值，如果是列表，则将他循环取出并以分号连接
+        for key, value in headers.items():
+            if isinstance(value, list):
+                headers[key] = ';'.join(value)
         for key, value in headers.items():
             # if value[0] == '{id}':
             #     headers[key] = ui_params['id']
@@ -225,14 +233,23 @@ def get_api(baseurl, params_info, ui_params, get_token=0, proxies=None):
             #     headers[key] = ui_params['token']
             # else:
             #     headers[key] = value[0]
-            if '{id}' in value[0]:
-                headers[key] = value[0].replace('{id}', ui_params['id'])
-            elif '{secert}' in value[0]:
-                headers[key] = value[0].replace('{secert}', ui_params['key'])
-            elif '{token}' in value[0]:
-                headers[key] = value[0].replace('{token}', ui_params['token'])
+            # 弃用，多个值时取值不全
+            # if '{id}' in value[0]:
+            #     headers[key] = value[0].replace('{id}', ui_params['id'])
+            # elif '{secert}' in value[0]:
+            #     headers[key] = value[0].replace('{secert}', ui_params['key'])
+            # elif '{token}' in value[0]:
+            #     headers[key] = value[0].replace('{token}', ui_params['token'])
+            # else:
+            #     headers[key] = value[0]
+            if '{id}' in value:
+                headers[key] = value.replace('{id}', ui_params['id'])
+            elif '{secert}' in value:
+                headers[key] = value.replace('{secert}', ui_params['key'])
+            elif '{token}' in value:
+                headers[key] = value.replace('{token}', ui_params['token'])
             else:
-                headers[key] = value[0]
+                headers[key] = value
         # 处理post_params
         post_params = parse_qs(post_params)
         for key, value in post_params.items():
